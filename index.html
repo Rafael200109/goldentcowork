@@ -11,11 +11,11 @@
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <meta http-equiv="Content-Security-Policy" content="
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com https://maps.googleapis.com;
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      img-src 'self' data: blob: https: https://horizons-cdn.hostinger.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com https://maps.googleapis.com https://unpkg.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://unpkg.com;
+      img-src 'self' data: blob: https: https://horizons-cdn.hostinger.com https://cdnjs.cloudflare.com https://*.tile.openstreetmap.org https://*.openstreetmap.org https://*.supabase.co;
       font-src 'self' https://fonts.gstatic.com data:;
-      connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://nominatim.openstreetmap.org https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com https://overpass-api.de;
+      connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://nominatim.openstreetmap.org https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com https://overpass-api.de https://*.tile.openstreetmap.org;
       frame-src 'self' https://www.paypal.com https://*.paypal.com;
       object-src 'none';
       base-uri 'self';
