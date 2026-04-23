@@ -1,0 +1,21 @@
+{
+  "name": "Goldent Co Work",
+  "short_name": "Goldent",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#DC2626",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://horizons-cdn.hostinger.com/63ef2070-7e9f-47c2-85b6-42a10bded4a0/4e7939d495f06d6165da02a8123b9012.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://horizons-cdn.hostinger.com/63ef2070-7e9f-47c2-85b6-42a10bded4a0/4e7939d495f06d6165da02a8123b9012.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

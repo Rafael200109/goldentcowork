@@ -1,0 +1,534 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+ 
+@layer base {
+  :root {
+    --background: 0 0% 100%; 
+    --foreground: 83 5% 10%; 
+ 
+    --card: 0 0% 100%;
+    --card-foreground: 83 5% 10%;
+ 
+    --popover: 0 0% 100%;
+    --popover-foreground: 83 5% 10%;
+ 
+    --primary: 83 25% 20%; 
+    --primary-foreground: 0 0% 98%; 
+ 
+    --secondary: 21 82% 51%; 
+    --secondary-foreground: 0 0% 98%; 
+ 
+    --muted: 83 15% 96%; 
+    --muted-foreground: 83 5% 45%;
+ 
+    --accent: 83 15% 94%;
+    --accent-foreground: 83 25% 20%;
+ 
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+ 
+    --border: 83 10% 90%; 
+    --input: 83 10% 90%;
+    --ring: 83 25% 20%;
+    
+    --radius: 0.75rem;
+
+    --booking-price-green-light: 83 30% 35%;
+    --goldent-green-light: 83 30% 35%;
+    --goldent-yellow-light: 38 90% 63%;
+    --alert-orange: 21 82% 51%;
+
+    --gradient-start: 83 25% 20%;
+    --gradient-end: 21 82% 51%;
+
+    --support-primary: 160 84% 39%;
+    --support-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+    --support-radius: 1rem;
+    
+    --policy-bg: 83 15% 96%;
+    --policy-border: 83 10% 90%;
+    --policy-icon-color: 83 25% 20%;
+    --policy-item-bg: 0 0% 100%;
+    
+    --status-checked-in: 142 71% 45%;
+    --status-checked-out: 220 13% 46%;
+
+    /* Image Optimization Variables */
+    --image-loading-bg: 83 10% 95%;
+    --image-error-bg: 0 10% 95%;
+
+    /* Calendar Optimization Variables */
+    --calendar-width-mobile: 240px;
+    --calendar-width-tablet: 280px;
+    --calendar-width-desktop: 320px;
+    
+    --calendar-cell-mobile: 30px;
+    --calendar-cell-tablet: 34px;
+    --calendar-cell-desktop: 38px;
+    
+    --calendar-gap: 0.25rem;
+    --calendar-padding: 0.5rem;
+
+    /* Gallery & Lightbox Variables */
+    --gallery-gap: 0.5rem;
+    --thumbnail-radius: 0.75rem;
+    --thumbnail-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+    --lightbox-z: 100;
+    
+    /* Carousel Variables */
+    --carousel-radius: 1rem;
+    --carousel-thumb-radius: 0.5rem;
+    --carousel-bg: 83 15% 96%;
+    --carousel-accent: 83 25% 20%;
+    --carousel-muted: 83 10% 90%;
+    --carousel-spacing-sm: 0.5rem;
+    --carousel-spacing-md: 1rem;
+    --carousel-spacing-lg: 1.5rem;
+
+    /* Drag and Drop Variables */
+    --dnd-opacity-active: 0.5;
+    --dnd-shadow-active: 0 20px 25px -5px rgb(0 0 0 / 0.2), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --dnd-scale-active: 1.05;
+  }
+
+  .dark {
+    --background: 83 25% 5%;
+    --foreground: 0 0% 98%;
+
+    --card: 83 25% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 83 25% 8%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 83 25% 60%;
+    --primary-foreground: 83 25% 10%;
+
+    --secondary: 21 82% 60%;
+    --secondary-foreground: 21 82% 10%;
+
+    --muted: 83 25% 15%;
+    --muted-foreground: 83 10% 65%;
+
+    --accent: 83 25% 15%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 83 25% 15%;
+    --input: 83 25% 15%;
+    --ring: 83 25% 60%;
+
+    --policy-bg: 83 25% 15%;
+    --policy-border: 83 25% 20%;
+    --policy-icon-color: 83 15% 94%;
+    --policy-item-bg: 83 25% 15%;
+    
+    --status-checked-in: 142 60% 45%;
+    --status-checked-out: 215 14% 34%;
+
+    /* Image Optimization Variables Dark */
+    --image-loading-bg: 83 10% 15%;
+    --image-error-bg: 0 10% 15%;
+
+    /* Carousel Variables Dark */
+    --carousel-bg: 83 25% 15%;
+    --carousel-accent: 83 15% 94%;
+    --carousel-muted: 83 25% 20%;
+
+    /* Drag and Drop Variables Dark */
+    --dnd-opacity-active: 0.6;
+    --dnd-shadow-active: 0 20px 25px -5px rgb(0 0 0 / 0.5), 0 8px 10px -6px rgb(0 0 0 / 0.3);
+  }
+}
+ 
+@layer base {
+  html {
+    height: 100%;
+    min-height: 100%;
+    min-height: -webkit-fill-available; 
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+
+  body {
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+    @apply bg-background text-foreground;
+    overflow-x: hidden; 
+    position: relative;
+    min-height: -webkit-fill-available;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+  
+  #root {
+    height: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  * {
+    @apply border-border;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground font-semibold tracking-tight;
+  }
+  
+  .text-muted-foreground {
+    color: hsl(var(--muted-foreground));
+  }
+}
+
+@layer utilities {
+    .min-h-dvh {
+        min-height: 100dvh;
+    }
+    .h-dvh {
+        height: 100dvh;
+    }
+
+    /* Animaciones suaves para imágenes */
+    .fade-in-image {
+        opacity: 0;
+        animation: smoothFadeIn 0.8s ease-in-out forwards;
+        will-change: opacity;
+    }
+
+    .placeholder-blur {
+        filter: blur(20px);
+        transform: scale(1.05); /* Evita bordes cortados al desenfocar */
+        transition: filter 0.6s ease-out;
+    }
+    
+    .bg-status-checked-in {
+        background-color: hsl(var(--status-checked-in));
+    }
+    .text-status-checked-in {
+        color: hsl(var(--status-checked-in));
+    }
+    .bg-status-checked-out {
+        background-color: hsl(var(--status-checked-out));
+    }
+    .text-status-checked-out {
+        color: hsl(var(--status-checked-out));
+    }
+
+    /* Image Optimization Utilities */
+    .image-skeleton-animation {
+      background: linear-gradient(
+        90deg,
+        hsl(var(--image-loading-bg)) 25%,
+        hsl(var(--image-loading-bg) / 0.7) 50%,
+        hsl(var(--image-loading-bg)) 75%
+      );
+      background-size: 400% 100%;
+      animation: skeleton-loading 1.5s infinite ease-in-out;
+    }
+
+    /* Calendar Optimized Responsive Utilities */
+    .calendar-wrapper {
+      width: 100%;
+      max-width: var(--calendar-width-mobile);
+      margin: 0 auto;
+      overflow: hidden;
+      padding: var(--calendar-padding);
+      display: flex;
+      justify-content: center;
+    }
+    @media (min-width: 768px) {
+      .calendar-wrapper { max-width: var(--calendar-width-tablet); }
+    }
+    @media (min-width: 1024px) {
+      .calendar-wrapper { max-width: var(--calendar-width-desktop); }
+    }
+    
+    .calendar-day-cell {
+      width: var(--calendar-cell-mobile) !important;
+      height: var(--calendar-cell-mobile) !important;
+      font-size: 0.8rem !important;
+      padding: 0 !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+    @media (min-width: 768px) {
+      .calendar-day-cell {
+        width: var(--calendar-cell-tablet) !important;
+        height: var(--calendar-cell-tablet) !important;
+        font-size: 0.85rem !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      .calendar-day-cell {
+        width: var(--calendar-cell-desktop) !important;
+        height: var(--calendar-cell-desktop) !important;
+        font-size: 0.875rem !important;
+      }
+    }
+
+    /* Admin Table Hover Effects */
+    .admin-table-row {
+      @apply transition-colors duration-200 hover:bg-muted/50;
+    }
+
+    /* Hide Scrollbar */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Reusable Utilities requested */
+    .error-state {
+        @apply border-destructive text-destructive;
+    }
+    .success-state {
+        @apply border-green-500 text-green-600;
+    }
+    .empty-state {
+        @apply flex flex-col items-center justify-center text-center p-8 text-muted-foreground;
+    }
+
+    /* Drag and Drop Utilities */
+    .cursor-grab {
+        cursor: grab;
+    }
+    .cursor-grabbing {
+        cursor: grabbing !important;
+    }
+    .drag-item {
+        transition: box-shadow 0.3s ease, opacity 0.3s ease, transform 0.3s ease, border-color 0.3s ease;
+    }
+    .drag-item-active {
+        opacity: var(--dnd-opacity-active);
+        box-shadow: var(--dnd-shadow-active);
+        transform: scale(var(--dnd-scale-active));
+        z-index: 50;
+    }
+
+    /* GPU Acceleration & Performance for DND */
+    .will-change-transform {
+        will-change: transform, box-shadow;
+    }
+    .backface-hidden {
+        backface-visibility: hidden;
+        -webkit-backface-visibility: hidden;
+    }
+    .contain-layout {
+        contain: layout style;
+    }
+    .touch-none-dnd {
+        touch-action: none;
+    }
+    .dnd-optimized {
+        @apply will-change-transform backface-hidden contain-layout touch-none-dnd;
+    }
+}
+
+@layer components {
+    .policy-list-item {
+        @apply flex items-start gap-3 p-4 rounded-lg transition-all duration-300;
+        background-color: hsl(var(--policy-item-bg));
+        border: 1px solid hsl(var(--policy-border));
+    }
+    .policy-list-item:hover {
+        @apply shadow-md scale-[1.01];
+        border-color: hsl(var(--primary) / 0.3);
+    }
+    .policy-icon-wrapper {
+        @apply p-2 rounded-full flex-shrink-0;
+        background-color: hsl(var(--policy-bg));
+        color: hsl(var(--policy-icon-color));
+    }
+
+    /* Rich Text Policies Formatting */
+    .prose-policies {
+      @apply text-base text-foreground/90 leading-relaxed break-words;
+    }
+    .prose-policies p {
+      @apply mb-4;
+    }
+    .prose-policies p:last-child {
+      @apply mb-0;
+    }
+    .prose-policies ul {
+      @apply list-disc pl-6 mb-4 space-y-1;
+    }
+    .prose-policies ol {
+      @apply list-decimal pl-6 mb-4 space-y-1;
+    }
+    .prose-policies h1 {
+      @apply text-2xl font-bold mt-6 mb-4 text-foreground;
+    }
+    .prose-policies h2 {
+      @apply text-xl font-bold mt-5 mb-3 text-foreground;
+    }
+    .prose-policies h3 {
+      @apply text-lg font-bold mt-4 mb-2 text-foreground;
+    }
+    .prose-policies a {
+      @apply text-primary hover:underline underline-offset-2;
+    }
+    .prose-policies strong, .prose-policies b {
+      @apply font-bold text-foreground;
+    }
+    .prose-policies em, .prose-policies i {
+      @apply italic;
+    }
+    .prose-policies u {
+      @apply underline underline-offset-2;
+    }
+
+    /* Photo Gallery Drag Item */
+    .photo-grid-item {
+        @apply relative aspect-square rounded-xl overflow-hidden border border-border bg-muted cursor-grab select-none dnd-optimized drag-item;
+    }
+    .photo-grid-item:active {
+        @apply cursor-grabbing;
+    }
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes smoothFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.animate-fade-in-scale {
+    animation: fadeInScale 0.6s ease-out forwards;
+}
+
+/* Custom Utilities */
+.gradient-text {
+  background: linear-gradient(to right, hsl(var(--gradient-start)), hsl(var(--gradient-end)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+.card-shadow {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+
+.card-hover:hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+}
+
+*:focus-visible {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+.map-tiles-muted .leaflet-tile-pane {
+  filter: saturate(1.1) contrast(1.05) brightness(0.98);
+}
+
+/* Policy Section Styles */
+.policy-section {
+  @apply mt-8;
+}
+
+.policy-content {
+  background-color: hsl(var(--policy-bg));
+  border-color: hsl(var(--policy-border));
+  @apply border rounded-xl p-5 text-foreground shadow-sm transition-colors hover:bg-accent/50 focus-within:ring-2 focus-within:ring-ring;
+}
+
+.policy-content p {
+  @apply text-sm md:text-base leading-relaxed text-foreground/90;
+}
+
+.prose-clinic-description {
+  @apply text-base text-foreground/90;
+}
+.prose-clinic-description p {
+  @apply mb-4 leading-relaxed;
+}
+.prose-clinic-description p:last-child {
+  @apply mb-0;
+}
+.prose-clinic-description ul {
+  @apply list-disc pl-6 mb-4 space-y-1;
+}
+.prose-clinic-description ol {
+  @apply list-decimal pl-6 mb-4 space-y-1;
+}
+.prose-clinic-description h1 {
+  @apply text-2xl font-bold mt-6 mb-4;
+}
+.prose-clinic-description h2 {
+  @apply text-xl font-bold mt-5 mb-3;
+}
+.prose-clinic-description h3 {
+  @apply text-lg font-bold mt-4 mb-2;
+}
+.prose-clinic-description a {
+  @apply text-primary hover:underline;
+}
+.prose-clinic-description strong, .prose-clinic-description b {
+  @apply font-bold text-foreground;
+}
+.prose-clinic-description em, .prose-clinic-description i {
+  @apply italic;
+}
+.prose-clinic-description u {
+  @apply underline underline-offset-2;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: hsl(var(--muted-foreground));
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+.tiptap {
+  @apply text-base text-foreground outline-none;
+}
+.tiptap p {
+  @apply mb-4 leading-relaxed;
+}
+.tiptap p:last-child {
+  @apply mb-0;
+}
+.tiptap ul {
+  @apply list-disc pl-6 mb-4 space-y-1;
+}
+.tiptap ol {
+  @apply list-decimal pl-6 mb-4 space-y-1;
+}
+.tiptap h1 {
+  @apply text-2xl font-bold mt-6 mb-4;
+}
+.tiptap h2 {
+  @apply text-xl font-bold mt-5 mb-3;
+}
+.tiptap h3 {
+  @apply text-lg font-bold mt-4 mb-2;
+}

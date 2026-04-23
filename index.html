@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es" style="height: 100%; min-height: 100%;">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="https://horizons-cdn.hostinger.com/63ef2070-7e9f-47c2-85b6-42a10bded4a0/4e7939d495f06d6165da02a8123b9012.png" />
+    <link rel="apple-touch-icon" href="https://horizons-cdn.hostinger.com/63ef2070-7e9f-47c2-85b6-42a10bded4a0/4e7939d495f06d6165da02a8123b9012.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#DC2626" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <meta http-equiv="Content-Security-Policy" content="
+      default-src 'self';
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com https://maps.googleapis.com;
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      img-src 'self' data: blob: https: https://horizons-cdn.hostinger.com;
+      font-src 'self' https://fonts.gstatic.com data:;
+      connect-src 'self' https: wss: https://*.supabase.co wss://*.supabase.co https://nominatim.openstreetmap.org https://www.paypal.com https://*.paypal.com https://*.paypalobjects.com https://overpass-api.de;
+      frame-src 'self' https://www.paypal.com https://*.paypal.com;
+      object-src 'none';
+      base-uri 'self';
+      form-action 'self';
+    " />
+    
+    <!-- Critical Viewport CSS Fixes -->
+    <style>
+      html, body { height: 100%; min-height: 100%; margin: 0; padding: 0; overscroll-behavior-y: none; }
+      #root { height: 100%; min-height: 100%; display: flex; flex-direction: column; }
+    </style>
+
+    <title>Goldent Co Work</title>
+  </head>
+  <body style="height: 100%; min-height: 100%; margin: 0; padding: 0;">
+    <div id="root" style="height: 100%; min-height: 100%; display: flex; flex-direction: column;"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
