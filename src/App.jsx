@@ -274,9 +274,51 @@ const App = () => {
     checkSupabase();
   }, []);
 
+  const handleRetryConnection = async () => {
+    setConnectionStatus((prev) => ({ ...prev, checking: true }));
+    const { isConnected, error } = await validateSupabaseConnection();
+    setConnectionStatus({
+      configured: true,
+      connected: isConnected,
+      error: error,
+      checking: false
+    });
+  };
+
   // Show configuration error if Supabase is not configured
   if (!connectionStatus.checking && !connectionStatus.configured) {
     return <SupabaseConfigError />;
+  }
+
+  // Show connection error if Supabase is configured but cannot connect
+  if (!connectionStatus.checking && connectionStatus.configured && !connectionStatus.connected) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-yellow-50 dark:bg-slate-950 p-4">
+        <div className="max-w-2xl w-full bg-white dark:bg-slate-900 rounded-2xl shadow-xl border border-yellow-300 dark:border-yellow-700 p-8">
+          <div className="flex items-center gap-3 mb-4">
+            <AlertTriangle className="w-10 h-10 text-yellow-600" />
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">Error de conexión con Supabase</h1>
+              <p className="text-sm text-muted-foreground">La aplicación no puede conectarse a Supabase desde este entorno.</p>
+            </div>
+          </div>
+
+          <div className="bg-yellow-50 dark:bg-yellow-950 rounded-lg border border-yellow-200 dark:border-yellow-800 p-4 mb-4">
+            <p className="text-sm text-yellow-900 dark:text-yellow-200">{connectionStatus.error || 'Verifica tus variables de entorno de Vercel y vuelve a desplegar.'}</p>
+          </div>
+
+          <div className="space-y-3">
+            <Button className="w-full" onClick={handleRetryConnection}>
+              <RefreshCw className="w-4 h-4 mr-2" />
+              Reintentar conexión
+            </Button>
+            <Button variant="outline" className="w-full" onClick={() => window.location.reload()}>
+              Recargar página
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
