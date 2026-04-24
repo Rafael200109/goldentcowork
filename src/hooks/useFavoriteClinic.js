@@ -98,12 +98,14 @@ export const useFavoriteClinic = (clinicId = null) => {
           
           if (error) throw error;
         } else {
+          // Use upsert to handle duplicates gracefully
           const { error } = await supabaseClient
             .from('favorite_clinics')
-            .insert([{ user_id: user.id, clinic_id: clinicId }]);
+            .upsert([{ user_id: user.id, clinic_id: clinicId }], { onConflict: 'user_id,clinic_id' });
           
           if (error) {
-            if (error.code === '23505') { 
+            // If upsert fails, check if it's already favorited
+            if (error.code === '23505') {
               setIsFavorite(true);
               return;
             }
