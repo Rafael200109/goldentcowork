@@ -84,7 +84,7 @@ const ProfilePage = () => {
       if (!user) return;
       setLoadingBookings(true);
       try {
-        const { data, error } = await supabase
+        const { data, error } = await supabaseClient
           .from('bookings')
           .select('*, clinic:clinics!bookings_clinic_id_fkey(name, host_id)')
           .eq('dentist_id', user.id)
@@ -135,7 +135,7 @@ const ProfilePage = () => {
       const { data: publicUrlData } = supabaseClient.storage.from('avatars').getPublicUrl(filePath);
       const newAvatarUrl = publicUrlData.publicUrl;
 
-      const { error: updateError } = await supabase
+      const { error: updateError } = await supabaseClient
         .from('profiles')
         .update({ avatar_url: newAvatarUrl })
         .eq('id', user.id);
