@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '@/contexts/UserContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -67,7 +67,7 @@ export const LoggedInHome = () => {
     const fetchNextBooking = async () => {
       if (!profile || profile.role !== 'dentist') return setLoadingBooking(false);
       try {
-        const { data } = await supabase.from('bookings').select('*, clinics!inner(name, address_sector)').eq('dentist_id', profile.id).eq('status', 'confirmed').gte('start_time', new Date().toISOString()).order('start_time').limit(1).maybeSingle();
+        const { data } = await supabaseClient.from('bookings').select('*, clinics!inner(name, address_sector)').eq('dentist_id', profile.id).eq('status', 'confirmed').gte('start_time', new Date().toISOString()).order('start_time').limit(1).maybeSingle();
         setNextBooking(data);
       } catch (err) {
         console.error(err);

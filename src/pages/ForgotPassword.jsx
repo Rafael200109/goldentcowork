@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Link } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
 import { Mail, Loader2, ArrowLeft, AlertCircle } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const ForgotPasswordPage = () => {
@@ -39,7 +39,7 @@ const ForgotPasswordPage = () => {
       // We use window.location.origin to ensure we redirect back to the current domain
       const redirectTo = `${window.location.origin}/update-password`;
 
-      const { error } = await supabase.auth.resetPasswordForEmail(emailToReset, {
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(emailToReset, {
         redirectTo: redirectTo,
       });
 

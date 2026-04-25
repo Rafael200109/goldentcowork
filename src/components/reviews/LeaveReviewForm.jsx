@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { Star, Loader2 } from 'lucide-react';
 
@@ -34,7 +34,7 @@ const LeaveReviewForm = ({ clinic, isOpen, onClose, onReviewSubmitted }) => {
     }
     setIsSubmitting(true);
     try {
-      const { error } = await supabase.from('reviews').insert({
+      const { error } = await supabaseClient.from('reviews').insert({
         clinic_id: clinic.id,
         dentist_id: user.id,
         rating,

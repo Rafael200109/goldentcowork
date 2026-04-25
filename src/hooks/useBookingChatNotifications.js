@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useNotifications } from '@/contexts/NotificationsContext';
@@ -95,7 +95,7 @@ export const useBookingChatNotifications = (options = {}) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(subscription);
+      supabaseClient.removeChannel(subscription);
     };
   }, [user, enableSound, enableToast, focusedBookingId, toast, fetchNotifications]);
 

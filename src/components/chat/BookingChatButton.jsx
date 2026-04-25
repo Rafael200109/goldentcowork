@@ -8,7 +8,7 @@ import BookingChatWindow from './BookingChatWindow';
 import { BookingChatProvider } from '@/contexts/BookingChatContext';
 import { isAfter, parseISO } from 'date-fns';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { cn } from '@/lib/utils';
 
 const BookingChatButton = ({ booking, className, isHost }) => {
@@ -34,7 +34,7 @@ const BookingChatButton = ({ booking, className, isHost }) => {
       
       fetchCount();
 
-      const channel = supabase.channel(`badge-${booking.id}`)
+      const channel = supabaseClient.channel(`badge-${booking.id}`)
         .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'booking_chat_messages', filter: `booking_id=eq.${booking.id}` }, 
         (payload) => {
             if (payload.new.sender_id !== user.id) {
@@ -43,7 +43,7 @@ const BookingChatButton = ({ booking, className, isHost }) => {
         })
         .subscribe();
         
-      return () => supabase.removeChannel(channel);
+      return () => supabaseClient.removeChannel(channel);
   }, [booking?.id, user, isHost]);
 
   // Task 1: Permissions - Only show to hosts

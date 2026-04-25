@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -73,8 +73,8 @@ const BookingConfirmationPage = () => {
           const dentistIds = [...new Set(rawBookings.map(b => b.dentist_id))];
 
           const [clinicsResponse, dentistsResponse] = await Promise.all([
-            clinicIds.length > 0 ? supabase.from('clinics').select('id, name').in('id', clinicIds) : { data: [] },
-            dentistIds.length > 0 ? supabase.from('profiles').select('id, full_name, email').in('id', dentistIds) : { data: [] }
+            clinicIds.length > 0 ? supabaseClient.from('clinics').select('id, name').in('id', clinicIds) : { data: [] },
+            dentistIds.length > 0 ? supabaseClient.from('profiles').select('id, full_name, email').in('id', dentistIds) : { data: [] }
           ]);
 
           const clinicsMap = (clinicsResponse.data || []).reduce((acc, c) => ({ ...acc, [c.id]: c }), {});
@@ -120,8 +120,8 @@ const BookingConfirmationPage = () => {
         const hostIds = [...new Set(rawFeatures.map(f => f.host_id))];
 
         const [fClinicsResponse, fHostsResponse] = await Promise.all([
-          featureClinicIds.length > 0 ? supabase.from('clinics').select('id, name').in('id', featureClinicIds) : { data: [] },
-          hostIds.length > 0 ? supabase.from('profiles').select('id, full_name, email, phone').in('id', hostIds) : { data: [] }
+          featureClinicIds.length > 0 ? supabaseClient.from('clinics').select('id, name').in('id', featureClinicIds) : { data: [] },
+          hostIds.length > 0 ? supabaseClient.from('profiles').select('id, full_name, email, phone').in('id', hostIds) : { data: [] }
         ]);
 
         const fClinicsMap = (fClinicsResponse.data || []).reduce((acc, c) => ({ ...acc, [c.id]: c }), {});

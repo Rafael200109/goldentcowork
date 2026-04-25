@@ -8,7 +8,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast";
 import { Eye, EyeOff, LogIn as LogInIcon, Loader2, AlertCircle } from 'lucide-react';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 
 export const Login = () => {
   const [email, setEmail] = useState('');

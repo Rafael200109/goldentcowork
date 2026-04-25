@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { TrendingUp, CheckCircle, AlertOctagon, Clock } from 'lucide-react';
@@ -11,7 +11,7 @@ export const SupportStats = () => {
   useEffect(() => {
     const loadStats = async () => {
       try {
-        const { data, error } = await supabase.rpc('get_support_stats');
+        const { data, error } = await supabaseClient.rpc('get_support_stats');
         if (error) throw error;
         setStats(data);
       } catch (e) {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -22,7 +22,7 @@ const PayoutsPage = () => {
     const fetchHostBalances = async () => {
       setLoading(true);
       try {
-        const { data, error } = await supabase.rpc('get_host_balances');
+        const { data, error } = await supabaseClient.rpc('get_host_balances');
         if (error) throw error;
         setHostBalances(data);
         setSelectedHosts(new Set(data.map(h => h.host_id))); // Select all by default
@@ -103,7 +103,7 @@ const PayoutsPage = () => {
                 transaction_ids: [], // This will be populated server-side or via another query
             }));
         
-        const { error: payoutsError } = await supabase.from('payouts').insert(payoutsToInsert);
+        const { error: payoutsError } = await supabaseClient.from('payouts').insert(payoutsToInsert);
         if (payoutsError) throw payoutsError;
 
         // Update transaction statuses

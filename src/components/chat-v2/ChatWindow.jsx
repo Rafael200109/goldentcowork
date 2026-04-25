@@ -12,7 +12,7 @@ import {
 import { useChat } from '@/hooks/useChat';
 import { useGlobalChat } from '@/contexts/ChatContext';
 import ChatMessage from './ChatMessage';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 
 const ChatWindow = ({ onClose }) => {
@@ -45,7 +45,7 @@ const ChatWindow = ({ onClose }) => {
         .subscribe();
 
       return () => {
-        supabase.removeChannel(channel);
+        supabaseClient.removeChannel(channel);
       };
     }
   }, [activeSession, fetchMessages]);

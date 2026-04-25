@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Card, CardHeader, CardTitle } from '@/components/ui/card';
@@ -36,7 +36,7 @@ const ChatPanel = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(sessionSubscription);
+      supabaseClient.removeChannel(sessionSubscription);
     };
   }, []);
 
@@ -71,7 +71,7 @@ const ChatPanel = () => {
         .subscribe();
 
       return () => {
-        supabase.removeChannel(messageSubscription);
+        supabaseClient.removeChannel(messageSubscription);
       };
     } else {
       setMessages([]);

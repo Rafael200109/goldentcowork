@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 
@@ -110,7 +110,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
 
     // Clean up subscription on unmount
     return () => {
-      supabase.removeChannel(channel);
+      supabaseClient.removeChannel(channel);
     };
   }, [bookingId, user]);
 
@@ -167,7 +167,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
     }));
 
     try {
-        const { error } = await supabase.from('read_receipts').upsert(receipts, { onConflict: 'message_id,user_id' });
+        const { error } = await supabaseClient.from('read_receipts').upsert(receipts, { onConflict: 'message_id,user_id' });
         
         if (error) throw error;
         

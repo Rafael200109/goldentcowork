@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useNavigate } from 'react-router-dom';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -128,7 +128,7 @@ const ChatConversationsList = ({ onSelectConversation, selectedBookingId }) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(subscription);
+      supabaseClient.removeChannel(subscription);
     };
   };
 

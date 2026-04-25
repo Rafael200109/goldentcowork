@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Loader2 } from 'lucide-react';
 
 const EditUserDialog = ({ user, isOpen, onOpenChange, onUserUpdated }) => {
@@ -63,7 +63,7 @@ const EditUserDialog = ({ user, isOpen, onOpenChange, onUserUpdated }) => {
 
       // 2. If email is changed, call the admin edge function to update it in auth.users and profiles
       if (formData.email !== user.email) {
-        const { error: functionError } = await supabase.functions.invoke('admin-user-actions', {
+        const { error: functionError } = await supabaseClient.functions.invoke('admin-user-actions', {
           body: {
             action: 'update',
             userId: user.id,

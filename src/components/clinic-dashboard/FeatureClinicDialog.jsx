@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { featurePlans, USD_TO_DOP_RATE } from '@/lib/featurePlans';
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -29,7 +29,7 @@ const FeatureClinicDialog = ({ clinic, isOpen, onClose }) => {
     setIsProcessing(true);
 
     try {
-      await supabase.from('featured_purchases').insert({
+      await supabaseClient.from('featured_purchases').insert({
         clinic_id: clinic.id,
         host_id: user.id,
         plan_name: selectedPlan.name,

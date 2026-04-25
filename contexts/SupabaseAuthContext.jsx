@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo } from 'react';
-import { supabase } from '@/lib/customSupabaseClient.js';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from '@/components/ui/use-toast.js';
 import { useNavigate } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
   const getProfile = useCallback(async (userId) => {
     if (!userId) return null;
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('profiles')
         .select('*')
         .eq('id', userId)
@@ -56,11 +56,11 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     setLoading(true);
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabaseClient.auth.getSession().then(({ data: { session } }) => {
       handleSession(session);
     });
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    const { data: { subscription } } = supabaseClient.auth.onAuthStateChange(
       (event, session) => {
         handleSession(session);
       }
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
 
   const signUp = useCallback(async (email, password, options) => {
     setLoading(true);
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabaseClient.auth.signUp({
       email,
       password,
       options,
@@ -91,7 +91,7 @@ export const AuthProvider = ({ children }) => {
 
   const signIn = useCallback(async (email, password) => {
     setLoading(true);
-    const { data, error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });
@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }) => {
 
   const signOut = useCallback(async () => {
     setLoading(true);
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabaseClient.auth.signOut();
     if (error) {
       toast({
         variant: "destructive",

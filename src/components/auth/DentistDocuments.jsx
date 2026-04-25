@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Loader2, Upload, CheckCircle, AlertCircle, X, FileText, ShieldCheck, BadgeCheck, Replace } from 'lucide-react';
 import { sanitizeFileName } from '@/lib/utils';
 import { motion } from 'framer-motion';
@@ -226,13 +226,13 @@ const DentistDocuments = ({ user, onUploadComplete }) => {
       const fileName = sanitizeFileName(file.name);
       const filePath = `${user.id}/${docType.id}_${Date.now()}_${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabaseClient.storage
         .from('dentist_documents')
         .upload(filePath, file, { upsert: true });
 
       if (uploadError) throw uploadError;
 
-      const { data: publicUrlData } = supabase.storage
+      const { data: publicUrlData } = supabaseClient.storage
         .from('dentist_documents')
         .getPublicUrl(filePath);
       

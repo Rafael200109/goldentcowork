@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { 
   Settings, Users, Shield, Globe, BarChart4, Save, 
   RotateCcw, Download, CreditCard,
@@ -59,12 +59,12 @@ const AdminSystemSettings = () => {
           let filename = '';
 
           if (type === 'users') {
-              const { data: users, error } = await supabase.from('profiles').select('id, full_name, email, role, phone, created_at');
+              const { data: users, error } = await supabaseClient.from('profiles').select('id, full_name, email, role, phone, created_at');
               if (error) throw error;
               data = users;
               filename = `usuarios_goldent_${new Date().toISOString().split('T')[0]}.csv`;
           } else if (type === 'transactions') {
-              const { data: transactions, error } = await supabase.from('transactions').select('id, amount, currency, status, payment_gateway, created_at, platform_fee');
+              const { data: transactions, error } = await supabaseClient.from('transactions').select('id, amount, currency, status, payment_gateway, created_at, platform_fee');
               if (error) throw error;
               data = transactions;
               filename = `transacciones_goldent_${new Date().toISOString().split('T')[0]}.csv`;

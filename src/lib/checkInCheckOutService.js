@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 
 export const checkInCheckOutService = {
   async getActiveCheckInForHost(host_id) {

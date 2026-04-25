@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Calendar } from '@/components/ui/calendar';
 import { es } from 'date-fns/locale';
 import { useUser } from '@/contexts/UserContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, ToggleLeft, ToggleRight, CalendarX, CalendarCheck, RefreshCw, Clock, Calendar as CalendarIcon, Sun } from 'lucide-react';
 import { startOfDay, endOfDay, format, isSameDay, startOfHour, endOfHour, differenceInHours, addDays } from 'date-fns';
@@ -146,12 +146,12 @@ const AvailabilityManager = () => {
         );
         
         if (dayBlock) {
-          const { error } = await supabase.from('clinic_unavailability').delete().eq('id', dayBlock.id);
+          const { error } = await supabaseClient.from('clinic_unavailability').delete().eq('id', dayBlock.id);
           if (error) throw error;
           toast({ title: "Día desbloqueado", description: "El día ahora está disponible para reservas." });
         }
       } else {
-        const { error } = await supabase.from('clinic_unavailability').insert({
+        const { error } = await supabaseClient.from('clinic_unavailability').insert({
           clinic_id: selectedClinicId,
           start_time: startOfDay(date).toISOString(),
           end_time: endOfDay(date).toISOString(),
@@ -195,11 +195,11 @@ const AvailabilityManager = () => {
         );
 
         if (overlappingBlock) {
-            const { error } = await supabase.from('clinic_unavailability').delete().eq('id', overlappingBlock.id);
+            const { error } = await supabaseClient.from('clinic_unavailability').delete().eq('id', overlappingBlock.id);
             if (error) throw error;
         }
       } else {
-        const { error } = await supabase.from('clinic_unavailability').insert({
+        const { error } = await supabaseClient.from('clinic_unavailability').insert({
           clinic_id: selectedClinicId,
           start_time: slotStart.toISOString(),
           end_time: slotEnd.toISOString(),

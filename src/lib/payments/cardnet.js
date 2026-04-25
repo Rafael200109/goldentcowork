@@ -1,4 +1,23 @@
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
+
+// Helper function to validate RPC function exists
+const validateRpcFunction = async (functionName) => {
+  try {
+    // Try to call the function with invalid parameters to check if it exists
+    const { error } = await supabaseClient.rpc(functionName, {});
+    // If we get a function not found error, the RPC doesn't exist
+    if (error && error.message.includes('function') && error.message.includes('does not exist')) {
+      throw new Error(`RPC function '${functionName}' does not exist in database`);
+    }
+    return true;
+  } catch (error) {
+    if (error.message.includes('does not exist')) {
+      throw error;
+    }
+    // Other errors (like parameter validation) are expected and mean the function exists
+    return true;
+  }
+};
 
 export const processCardnetPayment = async (bookingDetails) => {
   const {
@@ -22,7 +41,10 @@ export const processCardnetPayment = async (bookingDetails) => {
   }
 
   try {
-    const { data: bookingId, error } = await supabase.rpc('create_pending_booking_and_transaction', {
+    // Validate RPC function exists before calling
+    await validateRpcFunction('create_pending_booking_and_transaction');
+
+    const { data: bookingId, error } = await supabaseClient.rpc('create_pending_booking_and_transaction', {
       p_clinic_id: clinicId,
       p_user_id: userId,
       p_start_time: safeStartTime.toISOString(),

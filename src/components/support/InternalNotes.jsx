@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -47,7 +47,7 @@ export const InternalNotes = ({ conversationId }) => {
     if (!newNote.trim() || !profile) return;
     setSubmitting(true);
     try {
-      const { error } = await supabase.from('support_internal_notes').insert({
+      const { error } = await supabaseClient.from('support_internal_notes').insert({
         conversation_id: conversationId,
         agent_id: profile.id,
         content: newNote.trim()

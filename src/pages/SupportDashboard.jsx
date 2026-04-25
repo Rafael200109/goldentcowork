@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useUser } from '@/contexts/UserContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Card } from '@/components/ui/card';
@@ -41,7 +41,7 @@ const SupportDashboard = () => {
   // Initial fetch and real-time subscription (Logic preserved, simplified for view focus)
   useEffect(() => {
      const runCleanup = async () => {
-        try { await supabase.rpc('cleanup_old_support_tickets'); } catch (e) { console.log("Cleanup check failed", e); }
+        try { await supabaseClient.rpc('cleanup_old_support_tickets'); } catch (e) { console.log("Cleanup check failed", e); }
      };
      runCleanup();
   }, []);
@@ -73,10 +73,10 @@ const SupportDashboard = () => {
 
   useEffect(() => {
     fetchConversations();
-    const channel = supabase.channel('dashboard-updates')
+    const channel = supabaseClient.channel('dashboard-updates')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'support_conversations' }, () => fetchConversations())
       .subscribe();
-    return () => { supabase.removeChannel(channel); };
+    return () => { supabaseClient.removeChannel(channel); };
   }, [fetchConversations]);
 
   // Filtering logic
@@ -97,7 +97,7 @@ const SupportDashboard = () => {
   // Message fetching
   const fetchMessages = useCallback(async (id) => {
      setLoadingMessages(true);
-     const { data } = await supabase.from('support_messages').select('*, sender:sender_id(full_name, avatar_url, role)').eq('conversation_id', id).order('created_at', { ascending: true });
+     const { data } = await supabaseClient.from('support_messages').select('*, sender:sender_id(full_name, avatar_url, role)').eq('conversation_id', id).order('created_at', { ascending: true });
      setMessages(data || []);
      setLoadingMessages(false);
      setTimeout(() => messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
@@ -106,8 +106,8 @@ const SupportDashboard = () => {
   useEffect(() => {
      if (selectedConversation) {
         fetchMessages(selectedConversation.id);
-        const channel = supabase.channel(`chat-${selectedConversation.id}`).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'support_messages', filter: `conversation_id=eq.${selectedConversation.id}`}, () => { fetchMessages(selectedConversation.id); }).subscribe();
-        return () => { supabase.removeChannel(channel); };
+        const channel = supabaseClient.channel(`chat-${selectedConversation.id}`).on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'support_messages', filter: `conversation_id=eq.${selectedConversation.id}`}, () => { fetchMessages(selectedConversation.id); }).subscribe();
+        return () => { supabaseClient.removeChannel(channel); };
      }
   }, [selectedConversation, fetchMessages]);
 
@@ -115,8 +115,8 @@ const SupportDashboard = () => {
      e.preventDefault();
      if (!newMessage.trim() || !selectedConversation) return;
      setSending(true);
-     await supabase.from('support_messages').insert({ conversation_id: selectedConversation.id, sender_id: profile.id, content: newMessage.trim() });
-     await supabase.from('support_conversations').update({ updated_at: new Date() }).eq('id', selectedConversation.id);
+     await supabaseClient.from('support_messages').insert({ conversation_id: selectedConversation.id, sender_id: profile.id, content: newMessage.trim() });
+     await supabaseClient.from('support_conversations').update({ updated_at: new Date() }).eq('id', selectedConversation.id);
      setNewMessage('');
      setSending(false);
   };

@@ -3,7 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useUser } from '@/contexts/UserContext';
 import { Loader2 } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { storageManager } from '@/lib/storageManager';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -27,7 +27,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
           return;
         }
 
-        const { data, error } = await supabase.auth.getSession();
+        const { data, error } = await supabaseClient.auth.getSession();
         
         if (mounted) {
           if (error || !data.session) {

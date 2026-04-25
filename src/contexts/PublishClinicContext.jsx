@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from './SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -46,7 +46,7 @@ export const PublishClinicProvider = ({ children }) => {
     setLoading(true);
     try {
       // 1. Insert Core Clinic Record
-      const { data: clinic, error: clinicError } = await supabase.from('clinics').insert({
+      const { data: clinic, error: clinicError } = await supabaseClient.from('clinics').insert({
         host_id: user.id,
         name: clinicData.name,
         description: clinicData.description,
@@ -69,7 +69,7 @@ export const PublishClinicProvider = ({ children }) => {
       if (clinicData.policies_html) {
         const plainTextPolicies = clinicData.policies_html.replace(/<[^>]*>?/gm, '').trim();
         if (plainTextPolicies) {
-          const { error: policyError } = await supabase.from('clinic_policies').insert({
+          const { error: policyError } = await supabaseClient.from('clinic_policies').insert({
             clinic_id: clinic.id,
             policy_type: null, // Explicitly NULL to bypass constraints
             policy_text: plainTextPolicies,
@@ -92,13 +92,13 @@ export const PublishClinicProvider = ({ children }) => {
           is_cover: index === 0,
           display_order: index
         }));
-        const { error: photosError } = await supabase.from('clinic_photos').insert(photosToInsert);
+        const { error: photosError } = await supabaseClient.from('clinic_photos').insert(photosToInsert);
         if (photosError) throw new Error(`Error al guardar fotos: ${photosError.message}`);
       }
 
       // 4. Insert Services
       if (clinicData.selectedServices && clinicData.selectedServices.length > 0) {
-         const { data: allServices } = await supabase.from('services').select('*');
+         const { data: allServices } = await supabaseClient.from('services').select('*');
          const servicesToInsert = clinicData.selectedServices.map(serviceId => {
             const sDef = (allServices || []).find(s => s.id === serviceId);
             return {
@@ -108,7 +108,7 @@ export const PublishClinicProvider = ({ children }) => {
                 service_icon: sDef ? sDef.icon_url : ''
             };
          });
-         const { error: servicesError } = await supabase.from('clinic_services').insert(servicesToInsert);
+         const { error: servicesError } = await supabaseClient.from('clinic_services').insert(servicesToInsert);
          if (servicesError) throw new Error(`Error al guardar servicios: ${servicesError.message}`);
       }
 

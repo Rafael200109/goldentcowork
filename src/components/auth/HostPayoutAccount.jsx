@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
     import { Input } from '@/components/ui/input';
     import { Label } from '@/components/ui/label';
     import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-    import { supabase } from '@/lib/customSupabaseClient';
+    import { supabaseClient } from '@/config/supabaseConfig';
     import { useToast } from '@/components/ui/use-toast';
     import { Loader2, Banknote, Save } from 'lucide-react';
 

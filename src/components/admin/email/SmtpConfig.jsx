@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -26,7 +26,7 @@ const SmtpConfig = () => {
 
     const fetchConfig = async () => {
         setLoading(true);
-        const { data } = await supabase.from('system_config').select('value').eq('key', 'smtp_settings').maybeSingle();
+        const { data } = await supabaseClient.from('system_config').select('value').eq('key', 'smtp_settings').maybeSingle();
         if (data?.value) {
             setConfig(data.value);
         } else {
@@ -48,7 +48,7 @@ const SmtpConfig = () => {
         // NOTE: In a real high-security app, storing passwords in a json column in system_config 
         // isn't ideal without encryption, but Supabase Secrets are hard to manage from client.
         // We assume system_config RLS is restricted to admins only.
-        const { error } = await supabase.from('system_config').upsert({
+        const { error } = await supabaseClient.from('system_config').upsert({
             key: 'smtp_settings',
             value: config,
             description: 'Custom SMTP Configuration'

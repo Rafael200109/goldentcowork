@@ -1,5 +1,5 @@
 import React, { useState, useEffect, memo } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Outdent as Tooth, Sparkles, Zap, Smile, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '@/components/ui/button';

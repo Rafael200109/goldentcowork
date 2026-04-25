@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,7 +20,7 @@ const MassEmailSender = () => {
     const [showConfirmDialog, setShowConfirmDialog] = useState(false);
 
     useEffect(() => {
-        supabase.from('email_templates').select('id, name, subject').then(({data}) => {
+        supabaseClient.from('email_templates').select('id, name, subject').then(({data}) => {
             if(data) setTemplates(data);
         });
     }, []);
@@ -40,7 +40,7 @@ const MassEmailSender = () => {
 
         try {
             // 1. Fetch Users
-            let query = supabase.from('profiles').select('email, full_name');
+            let query = supabaseClient.from('profiles').select('email, full_name');
             if (targetGroup === 'dentists') query = query.eq('role', 'dentist');
             if (targetGroup === 'hosts') query = query.eq('role', 'clinic_host');
             
@@ -55,7 +55,7 @@ const MassEmailSender = () => {
             for (let i = 0; i < users.length; i += batchSize) {
                 const batch = users.slice(i, i + batchSize);
                 await Promise.all(batch.map(user => 
-                    supabase.functions.invoke('send-email', {
+                    supabaseClient.functions.invoke('send-email', {
                         body: {
                             template_name: selectedTemplate,
                             to_email: user.email,

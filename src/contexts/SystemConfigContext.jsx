@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from './SupabaseAuthContext';
 import { handleSupabaseError } from '@/lib/utils';
 
@@ -22,7 +22,7 @@ export const SystemConfigProvider = ({ children }) => {
   // Fetch initial config
   const fetchConfig = async () => {
     try {
-      const { data, error } = await supabase.from('system_config').select('*');
+      const { data, error } = await supabaseClient.from('system_config').select('*');
       if (error) throw error;
       
       const newConfig = { ...config };
@@ -63,7 +63,7 @@ export const SystemConfigProvider = ({ children }) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabaseClient.removeChannel(channel);
     };
   }, []);
 

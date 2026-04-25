@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import ReviewStars from './ReviewStars';
 import { Progress } from '@/components/ui/progress';
 import { Loader2, Smile, Outdent as Tooth, MapPin, Tag, Heart, Star, ThumbsUp } from 'lucide-react';

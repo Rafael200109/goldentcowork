@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { 
   Search, Shield, User, MoreHorizontal, 
   CheckCircle2, XCircle, Filter, Loader2, Save

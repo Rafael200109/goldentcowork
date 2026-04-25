@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -29,7 +29,7 @@ export const PayPalProvider = ({ children }) => {
         setError(null);
         try {
             // Fetch the Client ID from our secure edge function
-            const { data, error: functionError } = await supabase.functions.invoke('get-paypal-client-id');
+            const { data, error: functionError } = await supabaseClient.functions.invoke('get-paypal-client-id');
             
             if (functionError) throw functionError;
             if (data?.error) throw new Error(data.error);

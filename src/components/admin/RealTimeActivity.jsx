@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bell, UserPlus, Home, DollarSign, CalendarPlus } from 'lucide-react';
@@ -24,10 +24,10 @@ const RealTimeActivity = () => {
         setLoading(true);
         try {
             const [users, clinics, bookings, transactions] = await Promise.all([
-                supabase.from('profiles').select('full_name, created_at, id').order('created_at', { ascending: false }).limit(5),
-                supabase.from('clinics').select('name, created_at, id').order('created_at', { ascending: false }).limit(5),
-                supabase.from('bookings').select('id, created_at, dentist_id, profiles(full_name)').order('created_at', { ascending: false }).limit(5),
-                supabase.from('transactions').select('id, amount, created_at, status').eq('status', 'succeeded').order('created_at', { ascending: false }).limit(5)
+                supabaseClient.from('profiles').select('full_name, created_at, id').order('created_at', { ascending: false }).limit(5),
+                supabaseClient.from('clinics').select('name, created_at, id').order('created_at', { ascending: false }).limit(5),
+                supabaseClient.from('bookings').select('id, created_at, dentist_id, profiles(full_name)').order('created_at', { ascending: false }).limit(5),
+                supabaseClient.from('transactions').select('id, amount, created_at, status').eq('status', 'succeeded').order('created_at', { ascending: false }).limit(5)
             ]);
 
             if (users.error) throw users.error;
@@ -59,7 +59,7 @@ const RealTimeActivity = () => {
     useEffect(() => {
         fetchInitialActivities();
 
-        const channel = supabase.channel('public-activity')
+        const channel = supabaseClient.channel('public-activity')
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'profiles' }, (payload) => {
                 const u = payload.new;
                 setActivities(prev => [{ type: 'new_user', text: `${u.full_name} se ha registrado.`, time: u.created_at, id: `user-${u.id}` }, ...prev].slice(0, 10));
@@ -70,7 +70,7 @@ const RealTimeActivity = () => {
             })
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'bookings' }, async (payload) => {
                 const b = payload.new;
-                const { data: profile } = await supabase.from('profiles').select('full_name').eq('id', b.dentist_id).single();
+                const { data: profile } = await supabaseClient.from('profiles').select('full_name').eq('id', b.dentist_id).single();
                 setActivities(prev => [{ type: 'new_booking', text: `${profile?.full_name || 'Un dentista'} ha hecho una reserva.`, time: b.created_at, id: `booking-${b.id}` }, ...prev].slice(0, 10));
             })
             .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'transactions' }, (payload) => {
@@ -82,7 +82,7 @@ const RealTimeActivity = () => {
             .subscribe();
 
         return () => {
-            supabase.removeChannel(channel);
+            supabaseClient.removeChannel(channel);
         };
     }, [fetchInitialActivities]);
 

@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 
 /**
  * Servicio para enviar correos transaccionales a través de Supabase Edge Functions
@@ -62,7 +62,7 @@ export const emailService = {
 // Función helper privada
 async function sendEmailRequest(templateName, toEmail, data) {
   try {
-    const { data: responseData, error } = await supabase.functions.invoke('send-email', {
+    const { data: responseData, error } = await supabaseClient.functions.invoke('send-email', {
       body: {
         template_name: templateName,
         to_email: toEmail,

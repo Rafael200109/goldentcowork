@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -82,7 +82,7 @@ const EditClinicPage = () => {
     const {
       data: clinicData,
       error: clinicError
-    } = await supabase.from('clinics').select('*').eq('id', clinicId).single();
+    } = await supabaseClient.from('clinics').select('*').eq('id', clinicId).single();
     if (clinicError || !clinicData) {
       toast({
         variant: 'destructive',
@@ -111,7 +111,7 @@ const EditClinicPage = () => {
     // Removed the policy_type filter to ensure we load it even if it's NULL
     const {
       data: policyData
-    } = await supabase.from('clinic_policies').select('*').eq('clinic_id', clinicId).limit(1).maybeSingle();
+    } = await supabaseClient.from('clinic_policies').select('*').eq('clinic_id', clinicId).limit(1).maybeSingle();
     if (policyData) {
       setPolicyId(policyData.id);
       setPoliciesHtml(policyData.policies_html || (policyData.policy_text ? `<p>${policyData.policy_text}</p>` : ''));
@@ -253,7 +253,7 @@ const EditClinicPage = () => {
       const {
         count,
         error: countError
-      } = await supabase.from('clinic_photos').select('*', {
+      } = await supabaseClient.from('clinic_photos').select('*', {
         count: 'exact',
         head: true
       }).eq('clinic_id', clinicId);
@@ -271,7 +271,7 @@ const EditClinicPage = () => {
       // 1. Update Core Clinic Record
       const {
         error: updateError
-      } = await supabase.from('clinics').update({
+      } = await supabaseClient.from('clinics').update({
         ...formData,
         number_of_cubicles: parseInt(formData.number_of_cubicles, 10),
         min_hours_booking: parseInt(formData.min_hours_booking, 10),
@@ -299,13 +299,13 @@ const EditClinicPage = () => {
         if (policyId) {
           const {
             error: updatePolicyError
-          } = await supabase.from('clinic_policies').update(policyPayload).eq('id', policyId);
+          } = await supabaseClient.from('clinic_policies').update(policyPayload).eq('id', policyId);
           if (updatePolicyError) throw new Error(`Error al actualizar políticas en BD: ${updatePolicyError.message}`);
         } else {
           const {
             data: newPolicy,
             error: insertPolicyError
-          } = await supabase.from('clinic_policies').insert({
+          } = await supabaseClient.from('clinic_policies').insert({
             ...policyPayload,
             clinic_id: clinicId
           }).select().single();
@@ -315,7 +315,7 @@ const EditClinicPage = () => {
       } else if (policyId) {
         const {
           error: deletePolicyError
-        } = await supabase.from('clinic_policies').delete().eq('id', policyId);
+        } = await supabaseClient.from('clinic_policies').delete().eq('id', policyId);
         if (deletePolicyError) console.error("Error deleting empty policy:", deletePolicyError);
         setPolicyId(null);
         setPoliciesHtml('');

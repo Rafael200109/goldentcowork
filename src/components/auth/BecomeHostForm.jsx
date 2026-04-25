@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from '@/components/ui/use-toast';
 import { Loader2, Send, Check, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';

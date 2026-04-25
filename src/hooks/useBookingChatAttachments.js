@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from '@/components/ui/use-toast';
 import { handleSupabaseError } from '@/lib/utils';
 
@@ -30,7 +30,7 @@ export const useBookingChatAttachments = (bookingId) => {
       const fileName = `${bookingId}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      const { data, error } = await supabase.storage
+      const { data, error } = await supabaseClient.storage
         .from('booking_chat_attachments')
         .upload(filePath, file, {
           cacheControl: '3600',
@@ -40,7 +40,7 @@ export const useBookingChatAttachments = (bookingId) => {
       if (error) throw error;
 
       // Get public URL
-      const { data: { publicUrl } } = supabase.storage
+      const { data: { publicUrl } } = supabaseClient.storage
         .from('booking_chat_attachments')
         .getPublicUrl(filePath);
 

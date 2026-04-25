@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 
 export const bookingChatService = {
   /**
@@ -93,7 +93,7 @@ export const bookingChatService = {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(subscription);
+      supabaseClient.removeChannel(subscription);
     };
   }
 };

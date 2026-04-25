@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -147,7 +147,7 @@ export const MyBookingsPage = () => {
     
     setCancellingBookingId(bookingId);
     try {
-      const { data, error } = await supabase.rpc('dentist_cancel_booking', {
+      const { data, error } = await supabaseClient.rpc('dentist_cancel_booking', {
         p_booking_id: bookingId
       });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { DataTable } from '@/components/admin/DataTable';
 import { Badge } from '@/components/ui/badge.jsx';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";

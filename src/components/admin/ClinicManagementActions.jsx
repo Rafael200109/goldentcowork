@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import {
@@ -65,10 +65,10 @@ const ClinicManagementActions = ({ clinic, onActionComplete }) => {
 
         try {
             if (isDelete) {
-                 const { error } = await supabase.from('clinics').delete().eq('id', clinic.id);
+                 const { error } = await supabaseClient.from('clinics').delete().eq('id', clinic.id);
                  if (error) throw error;
             } else {
-                const { error } = await supabase.from('clinics').update(updateData).eq('id', clinic.id);
+                const { error } = await supabaseClient.from('clinics').update(updateData).eq('id', clinic.id);
                 if (error) throw error;
             }
 

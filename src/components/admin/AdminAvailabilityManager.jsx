@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { format, startOfDay, endOfDay, isSameDay, differenceInHours } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { 
@@ -141,10 +141,10 @@ const AdminAvailabilityManager = () => {
 
     try {
       if (status === 'blocked') {
-        const { error } = await supabase.from('clinic_unavailability').delete().eq('id', id);
+        const { error } = await supabaseClient.from('clinic_unavailability').delete().eq('id', id);
         if (error) throw error;
       } else {
-        const { error } = await supabase.from('clinic_unavailability').insert({
+        const { error } = await supabaseClient.from('clinic_unavailability').insert({
           clinic_id: selectedClinic.id,
           start_time: slotStart.toISOString(),
           end_time: slotEnd.toISOString(),
@@ -176,11 +176,11 @@ const AdminAvailabilityManager = () => {
             const dayStart = startOfDay(date);
             const blocks = availability.unavailability.filter(u => isSameDay(u.start_time, dayStart) && differenceInHours(u.end_time, u.start_time) >= 12);
             for (const b of blocks) {
-                await supabase.from('clinic_unavailability').delete().eq('id', b.id);
+                await supabaseClient.from('clinic_unavailability').delete().eq('id', b.id);
             }
         } else {
             // Lock
-            await supabase.from('clinic_unavailability').insert({
+            await supabaseClient.from('clinic_unavailability').insert({
                 clinic_id: selectedClinic.id,
                 start_time: startOfDay(date).toISOString(),
                 end_time: endOfDay(date).toISOString(),

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { Badge } from '@/components/ui/badge';
@@ -24,7 +24,7 @@ const FeatureRequestActions = ({ request, onProcessed }) => {
     setIsLoading(true);
     try {
       if (action === 'approve') {
-        const { error } = await supabase.rpc('process_feature_payment', {
+        const { error } = await supabaseClient.rpc('process_feature_payment', {
             p_purchase_id: request.id,
             p_gateway_transaction_id: 'manual_admin_approval_' + Date.now()
         });
@@ -32,7 +32,7 @@ const FeatureRequestActions = ({ request, onProcessed }) => {
         if (error) throw error;
         toast({ title: "Solicitud Aprobada", description: "La clínica ha sido destacada correctamente." });
       } else { // 'reject'
-        const { error } = await supabase.rpc('reject_feature_purchase', { p_purchase_id: request.id });
+        const { error } = await supabaseClient.rpc('reject_feature_purchase', { p_purchase_id: request.id });
         if (error) throw error;
         toast({ title: "Solicitud Rechazada", description: "La solicitud ha sido rechazada." });
       }

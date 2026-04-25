@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
@@ -42,7 +42,7 @@ export const SupportTicketDetails = ({ conversation, onUpdate }) => {
       if (error) throw error;
 
       // Log Audit
-      await supabase.from('support_audit_logs').insert({
+      await supabaseClient.from('support_audit_logs').insert({
         conversation_id: conversation.id,
         actor_id: profile.id,
         action: `${field}_change`,
@@ -80,7 +80,7 @@ export const SupportTicketDetails = ({ conversation, onUpdate }) => {
       if (error) throw error;
 
       // 2. Audit Log
-      await supabase.from('support_audit_logs').insert({
+      await supabaseClient.from('support_audit_logs').insert({
         conversation_id: conversation.id,
         actor_id: profile.id,
         action: 'status_change',

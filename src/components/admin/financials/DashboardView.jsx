@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -32,16 +32,16 @@ const DashboardView = ({ onNavigateToNewPayout, onNavigateToBatchDetails }) => {
     setLoading(true);
     try {
       const [transactionsRes, hostBalancesRes, payoutBatchesRes, clinicsRes] = await Promise.all([
-        supabase.from('transactions').select(`
+        supabaseClient.from('transactions').select(`
           *, 
           booking:bookings!inner(
             dentist:profiles!bookings_dentist_id_fkey(full_name), 
             clinic:clinics!bookings_clinic_id_fkey(id, name, host:profiles!clinics_host_id_fkey(full_name))
           )
         `).order('created_at', { ascending: false }),
-        supabase.rpc('get_host_balances'),
-        supabase.from('payout_batches').select('*').order('created_at', { ascending: false }),
-        supabase.from('clinics').select('id, name, host:profiles(full_name)').order('name', { ascending: true })
+        supabaseClient.rpc('get_host_balances'),
+        supabaseClient.from('payout_batches').select('*').order('created_at', { ascending: false }),
+        supabaseClient.from('clinics').select('id, name, host:profiles(full_name)').order('name', { ascending: true })
       ]);
 
       if (transactionsRes.error) throw transactionsRes.error;
@@ -73,7 +73,7 @@ const DashboardView = ({ onNavigateToNewPayout, onNavigateToBatchDetails }) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabaseClient.removeChannel(channel);
     };
   }, [fetchData]);
 

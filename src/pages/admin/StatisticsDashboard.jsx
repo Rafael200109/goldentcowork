@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -49,9 +49,9 @@ const StatisticsDashboard = () => {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        const { count: userCount } = await supabase.from('profiles').select('*', { count: 'exact', head: true });
-        const { count: clinicCount } = await supabase.from('clinics').select('*', { count: 'exact', head: true });
-        const { count: bookingCount } = await supabase.from('bookings').select('*', { count: 'exact', head: true });
+        const { count: userCount } = await supabaseClient.from('profiles').select('*', { count: 'exact', head: true });
+        const { count: clinicCount } = await supabaseClient.from('clinics').select('*', { count: 'exact', head: true });
+        const { count: bookingCount } = await supabaseClient.from('bookings').select('*', { count: 'exact', head: true });
         
         const { data: transactionsData, error: transactionsError } = await supabase
           .from('transactions')
@@ -63,7 +63,7 @@ const StatisticsDashboard = () => {
 
         const totalRevenue = validTransactions.reduce((acc, transaction) => acc + transaction.amount, 0);
 
-        const { data: usersByRole, error: rolesError } = await supabase.from('profiles').select('role');
+        const { data: usersByRole, error: rolesError } = await supabaseClient.from('profiles').select('role');
         if (rolesError) throw rolesError;
         const roleCounts = usersByRole.reduce((acc, user) => {
           acc[user.role] = (acc[user.role] || 0) + 1;
@@ -74,7 +74,7 @@ const StatisticsDashboard = () => {
           { name: 'Anfitriones', value: roleCounts.clinic_host || 0 },
         ];
 
-        const { data: clinicsByStatus, error: statusError } = await supabase.from('clinics').select('status');
+        const { data: clinicsByStatus, error: statusError } = await supabaseClient.from('clinics').select('status');
         if (statusError) throw statusError;
         const statusCounts = clinicsByStatus.reduce((acc, clinic) => {
           acc[clinic.status] = (acc[clinic.status] || 0) + 1;

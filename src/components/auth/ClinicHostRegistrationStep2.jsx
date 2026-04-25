@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { useToast } from "@/components/ui/use-toast";
 import { Loader2 } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import FileUploadItem from '@/components/auth/FileUploadItem';
 import { sanitizeFileName } from '@/lib/utils';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -81,7 +81,7 @@ const ClinicHostRegistrationStep2 = ({ onComplete, step1Data }) => {
       ];
 
       const uploadPromises = uploadTasks.map(task => 
-        supabase.storage.from('user_documents').upload(`${user.id}/${task.name}`, task.file, { upsert: true })
+        supabaseClient.storage.from('user_documents').upload(`${user.id}/${task.name}`, task.file, { upsert: true })
       );
 
       const uploadResults = await Promise.all(uploadPromises);
@@ -100,7 +100,7 @@ const ClinicHostRegistrationStep2 = ({ onComplete, step1Data }) => {
 
       if (updateError) throw updateError;
       
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
 
       if (onComplete) onComplete();
 

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { useChat } from '@/hooks/useChat';
 
@@ -56,8 +56,8 @@ export const ChatProvider = ({ children }) => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(messageSubscription);
-      supabase.removeChannel(sessionSubscription);
+      supabaseClient.removeChannel(messageSubscription);
+      supabaseClient.removeChannel(sessionSubscription);
     };
   }, [activeSession, user, isWidgetOpen]);
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useUser } from '@/contexts/UserContext';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -124,7 +124,7 @@ const ProfilePage = () => {
     setUploadingAvatar(true);
     try {
       const filePath = `${user.id}/avatar-${Date.now()}`;
-      const { error: uploadError } = await supabase.storage
+      const { error: uploadError } = await supabaseClient.storage
         .from('avatars')
         .upload(filePath, file, {
           upsert: true,
@@ -132,7 +132,7 @@ const ProfilePage = () => {
 
       if (uploadError) throw uploadError;
 
-      const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(filePath);
+      const { data: publicUrlData } = supabaseClient.storage.from('avatars').getPublicUrl(filePath);
       const newAvatarUrl = publicUrlData.publicUrl;
 
       const { error: updateError } = await supabase

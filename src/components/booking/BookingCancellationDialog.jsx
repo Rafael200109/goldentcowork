@@ -16,7 +16,7 @@ import { Label } from "@/components/ui/label";
 import { AlertCircle, Clock, CheckCircle2 } from "lucide-react";
 import { differenceInHours, parseISO, format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from "@/components/ui/use-toast";
 
 export function BookingCancellationDialog({ booking, triggerButton, onCancellationSuccess }) {
@@ -35,7 +35,7 @@ export function BookingCancellationDialog({ booking, triggerButton, onCancellati
   const handleCancel = async () => {
     setIsSubmitting(true);
     try {
-      const { data, error } = await supabase.rpc('dentist_cancel_booking', {
+      const { data, error } = await supabaseClient.rpc('dentist_cancel_booking', {
         p_booking_id: booking.id,
         p_reason: reason
       });

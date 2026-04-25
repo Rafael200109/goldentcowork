@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useUser } from '@/contexts/UserContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
@@ -129,7 +129,7 @@ const SupportChatWidget = () => {
       .subscribe();
 
     return () => {
-      supabase.removeChannel(channel);
+      supabaseClient.removeChannel(channel);
     };
   }, [conversation, handleNewMessage]);
 
@@ -211,7 +211,7 @@ const SupportChatWidget = () => {
             const fileExt = fileToUpload.name.split('.').pop();
             const fileName = `${conversation.id}/${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
             
-            const { error: uploadError } = await supabase.storage
+            const { error: uploadError } = await supabaseClient.storage
                 .from('support_attachments')
                 .upload(fileName, fileToUpload);
 
@@ -219,7 +219,7 @@ const SupportChatWidget = () => {
                 throw new Error('Error al subir la imagen');
             }
 
-            const { data: publicUrlData } = supabase.storage
+            const { data: publicUrlData } = supabaseClient.storage
                 .from('support_attachments')
                 .getPublicUrl(fileName);
             
@@ -227,7 +227,7 @@ const SupportChatWidget = () => {
             attachmentType = 'image';
         }
 
-        const { data: insertedData, error } = await supabase.from('support_messages').insert({
+        const { data: insertedData, error } = await supabaseClient.from('support_messages').insert({
             conversation_id: conversation.id,
             sender_id: profile.id,
             content: messageContent,

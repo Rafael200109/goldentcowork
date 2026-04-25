@@ -9,7 +9,7 @@ import {
   Clock, Microscope, BadgeCheck,
   Zap, Users, Smile, ScanLine, Syringe, Puzzle, BadgeDollarSign,
 } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import LazyImage from '@/components/ui/LazyImage';
 
 /* ─────────────────────────────────────────────

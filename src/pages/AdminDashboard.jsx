@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import StatCard from '@/components/admin/StatCard';
@@ -42,12 +42,12 @@ const AdminDashboard = () => {
                     hostRequestsCount,
                     pendingBookingsCount
                 ] = await Promise.all([
-                    supabase.from('profiles').select('id', { count: 'exact', head: true }),
-                    supabase.from('clinics').select('id', { count: 'exact', head: true }),
-                    supabase.from('transactions').select('platform_fee').eq('status', 'succeeded').gte('created_at', thirtyDaysAgo.toISOString()),
-                    supabase.from('support_conversations').select('id', { count: 'exact', head: true }).in('status', ['open', 'pending']),
-                    supabase.from('host_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
-                    supabase.from('bookings').select('id', { count: 'exact', head: true }).eq('status', 'pending')
+                    supabaseClient.from('profiles').select('id', { count: 'exact', head: true }),
+                    supabaseClient.from('clinics').select('id', { count: 'exact', head: true }),
+                    supabaseClient.from('transactions').select('platform_fee').eq('status', 'succeeded').gte('created_at', thirtyDaysAgo.toISOString()),
+                    supabaseClient.from('support_conversations').select('id', { count: 'exact', head: true }).in('status', ['open', 'pending']),
+                    supabaseClient.from('host_requests').select('id', { count: 'exact', head: true }).eq('status', 'pending'),
+                    supabaseClient.from('bookings').select('id', { count: 'exact', head: true }).eq('status', 'pending')
                 ]);
 
                 if (usersCount.error) throw usersCount.error;

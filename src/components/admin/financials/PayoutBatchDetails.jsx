@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -24,8 +24,8 @@ const PayoutBatchDetails = ({ batchId, onBack }) => {
     setLoading(true);
     try {
       const [batchRes, payoutsRes] = await Promise.all([
-        supabase.from('payout_batches').select('*, processed_by_user:profiles(full_name)').eq('id', batchId).single(),
-        supabase.from('payouts').select('*, host:profiles(full_name, email)').eq('batch_id', batchId)
+        supabaseClient.from('payout_batches').select('*, processed_by_user:profiles(full_name)').eq('id', batchId).single(),
+        supabaseClient.from('payouts').select('*, host:profiles(full_name, email)').eq('batch_id', batchId)
       ]);
       if (batchRes.error) throw batchRes.error;
       if (payoutsRes.error) throw payoutsRes.error;
@@ -45,7 +45,7 @@ const PayoutBatchDetails = ({ batchId, onBack }) => {
   const handleMarkAsPaid = async () => {
     setIsProcessing(true);
     try {
-      const { error } = await supabase.rpc('mark_payout_batch_as_paid', { p_batch_id: batchId, p_user_id: profile.id });
+      const { error } = await supabaseClient.rpc('mark_payout_batch_as_paid', { p_batch_id: batchId, p_user_id: profile.id });
       if (error) throw error;
       toast({ variant: 'success', title: 'Lote marcado como pagado' });
       fetchData();

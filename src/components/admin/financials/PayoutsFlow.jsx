@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,7 +20,7 @@ const PayoutsFlow = ({ onBack, onBatchCreated }) => {
   useEffect(() => {
     const fetchBalances = async () => {
       setLoading(true);
-      const { data, error } = await supabase.rpc('get_host_balances');
+      const { data, error } = await supabaseClient.rpc('get_host_balances');
       if (error) {
         toast({ variant: 'destructive', title: 'Error', description: error.message });
         setHostBalances([]);
@@ -61,7 +61,7 @@ const PayoutsFlow = ({ onBack, onBatchCreated }) => {
     setIsProcessing(true);
     try {
       const selectedHostIds = Object.keys(selectedHosts).filter(id => selectedHosts[id]);
-      const { data: batchId, error: batchError } = await supabase.rpc('create_payout_batch', {
+      const { data: batchId, error: batchError } = await supabaseClient.rpc('create_payout_batch', {
         p_host_ids: selectedHostIds,
         p_processed_by: profile.id
       });

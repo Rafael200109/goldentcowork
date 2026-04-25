@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -39,7 +39,7 @@ const BookingConfirmationActions = ({ booking, onActionComplete }) => {
 
     setIsLoadingConfirm(true);
     try {
-      const { error } = await supabase.rpc('confirm_cardnet_payment', {
+      const { error } = await supabaseClient.rpc('confirm_cardnet_payment', {
         p_booking_id: booking.id,
         p_admin_id: user.id
       });
@@ -90,7 +90,7 @@ const BookingConfirmationActions = ({ booking, onActionComplete }) => {
   const handleCancelBooking = async () => {
     setIsLoadingCancel(true);
     try {
-      const { error } = await supabase.rpc('cancel_pending_booking', {
+      const { error } = await supabaseClient.rpc('cancel_pending_booking', {
         p_booking_id: booking.id
       });
       if (error) throw error;

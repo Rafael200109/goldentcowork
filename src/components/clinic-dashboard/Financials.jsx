@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
@@ -56,7 +56,7 @@ const Financials = () => {
       if (!user) return;
       setLoading(true);
       try {
-        const { data, error } = await supabase.rpc('get_host_financial_summary', { p_host_id: user.id });
+        const { data, error } = await supabaseClient.rpc('get_host_financial_summary', { p_host_id: user.id });
         if (error) throw error;
         
         if (data && data.length > 0) {

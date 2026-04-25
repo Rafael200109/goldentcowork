@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/components/ui/use-toast';
 import { MoreHorizontal, Edit, Trash2, UserX, KeyRound, FileCheck2 } from 'lucide-react';
@@ -39,7 +39,7 @@ const UserActions = ({ user, onActionComplete }) => {
     try {
       let userEmail = user.email;
       if (!userEmail) {
-        const { data, error: functionError } = await supabase.functions.invoke('admin-user-actions', {
+        const { data, error: functionError } = await supabaseClient.functions.invoke('admin-user-actions', {
           body: { action: 'getUser', userId: user.id },
         });
 
@@ -53,7 +53,7 @@ const UserActions = ({ user, onActionComplete }) => {
         throw new Error("El usuario no tiene un correo electrónico registrado.");
       }
 
-      const { error } = await supabase.auth.resetPasswordForEmail(userEmail, {
+      const { error } = await supabaseClient.auth.resetPasswordForEmail(userEmail, {
         redirectTo: `${window.location.origin}/update-password`,
       });
       if (error) throw error;
@@ -75,7 +75,7 @@ const UserActions = ({ user, onActionComplete }) => {
   const handleSuspend = async () => {
     setIsSuspending(true);
     try {
-      const { error } = await supabase.functions.invoke('admin-user-actions', {
+      const { error } = await supabaseClient.functions.invoke('admin-user-actions', {
         body: { action: 'suspend', userId: user.id },
       });
       if (error) throw error;
@@ -100,11 +100,11 @@ const UserActions = ({ user, onActionComplete }) => {
     setIsDeleting(true);
     try {
       // First, delete from profiles table due to RLS
-      const { error: profileError } = await supabase.from('profiles').delete().eq('id', user.id);
+      const { error: profileError } = await supabaseClient.from('profiles').delete().eq('id', user.id);
       if (profileError) throw profileError;
 
       // Then, delete from auth.users
-      const { error: authError } = await supabase.functions.invoke('admin-user-actions', {
+      const { error: authError } = await supabaseClient.functions.invoke('admin-user-actions', {
         body: { action: 'delete', userId: user.id },
       });
       if (authError) {

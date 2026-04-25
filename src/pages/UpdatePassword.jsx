@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from "@/components/ui/use-toast.js";
 import { KeyRound, Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
-import { supabase } from '@/lib/customSupabaseClient.js';
+import { supabaseClient } from '@/config/supabaseConfig';
 
 const UpdatePasswordPage = () => {
   const [password, setPassword] = useState('');
@@ -32,7 +32,7 @@ const UpdatePasswordPage = () => {
     setLoading(true);
 
     // The user is in a password recovery state, so we can update the password.
-    const { error: updateError } = await supabase.auth.updateUser({ password });
+    const { error: updateError } = await supabaseClient.auth.updateUser({ password });
 
     if (updateError) {
       setLoading(false);
@@ -43,7 +43,7 @@ const UpdatePasswordPage = () => {
       });
     } else {
       // IMPORTANT: Sign out to destroy the recovery session
-      await supabase.auth.signOut();
+      await supabaseClient.auth.signOut();
       setLoading(false);
       toast({
         title: "¡Éxito!",

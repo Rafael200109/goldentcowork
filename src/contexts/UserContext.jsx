@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState, useCallback, useMemo, useRef } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useAuth } from './SupabaseAuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { handleSupabaseError } from '@/lib/utils';
@@ -37,7 +37,7 @@ export const UserProvider = ({ children }) => {
       logUserEvent('FETCH_PROFILE_START', { userId, retryCount });
 
       // Use the client directly, no fetch
-      const { data, error: fetchError } = await supabase
+      const { data, error: fetchError } = await supabaseClient
         .from('profiles')
         .select(`*`)
         .eq('id', userId)

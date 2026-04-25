@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { DataTable } from '@/components/admin/DataTable';
 import { Badge } from '@/components/ui/badge.jsx';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -28,7 +28,7 @@ const UserManagementPage = () => {
     setLoading(true);
     setError(null);
     try {
-      const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+      const { data, error } = await supabaseClient.from('profiles').select('*').order('created_at', { ascending: false });
       if (error) throw error;
       setUsers(data);
     } catch (err) {

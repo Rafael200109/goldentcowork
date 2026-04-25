@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import imageCompression from 'browser-image-compression';
 import { generatePhotoFileName, validatePhotoFile } from './photoValidation';
 
@@ -31,7 +31,7 @@ export const uploadOptimizedImage = async (file, bucket, path, onProgress) => {
     
     if (onProgress) onProgress(60);
 
-    const { error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabaseClient.storage
       .from(bucket)
       .upload(path, compressedFile, {
         cacheControl: '31536000',
@@ -42,7 +42,7 @@ export const uploadOptimizedImage = async (file, bucket, path, onProgress) => {
     if (uploadError) throw uploadError;
     if (onProgress) onProgress(90);
 
-    const { data: { publicUrl } } = supabase.storage
+    const { data: { publicUrl } } = supabaseClient.storage
       .from(bucket)
       .getPublicUrl(path);
 
@@ -68,7 +68,7 @@ export const deleteImageFromStorage = async (bucket, photoUrl) => {
     
     if (bucketIndex !== -1) {
       const filePath = pathParts.slice(bucketIndex + 1).join('/');
-      const { error } = await supabase.storage.from(bucket).remove([filePath]);
+      const { error } = await supabaseClient.storage.from(bucket).remove([filePath]);
       if (error) throw error;
       return { success: true };
     }

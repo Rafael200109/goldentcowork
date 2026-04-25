@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { supabase } from '@/lib/customSupabaseClient.js';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useClinicPhotos } from '@/hooks/useClinicPhotos';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -41,7 +41,7 @@ const AdminPhotoManager = ({ clinicId, clinicName }) => {
       }));
 
       for (const update of updates) {
-        const { error } = await supabase
+        const { error } = await supabaseClient
           .from('clinic_photos')
           .update({ display_order: update.display_order })
           .eq('id', update.id);

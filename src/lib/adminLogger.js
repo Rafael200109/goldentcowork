@@ -1,4 +1,4 @@
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 
 /**
  * Logs an administrative action to the audit_logs table.
@@ -10,14 +10,14 @@ import { supabase } from '@/lib/customSupabaseClient';
  */
 export const logAdminAction = async (action, targetResource, targetId = null, details = {}) => {
   try {
-    const { data: { user } } = await supabase.auth.getUser();
+    const { data: { user } } = await supabaseClient.auth.getUser();
     
     if (!user) {
       console.warn('Attempted to log admin action without active user session');
       return;
     }
 
-    const { error } = await supabase.from('audit_logs').insert({
+    const { error } = await supabaseClient.from('audit_logs').insert({
       admin_id: user.id,
       action,
       target_resource: targetResource,

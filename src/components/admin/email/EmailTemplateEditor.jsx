@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -40,7 +40,7 @@ const EmailTemplateEditor = () => {
 
   const fetchTemplates = async () => {
     setLoading(true);
-    const { data, error } = await supabase.from('email_templates').select('*').order('name');
+    const { data, error } = await supabaseClient.from('email_templates').select('*').order('name');
     if (error) {
       toast({ variant: 'destructive', title: 'Error', description: 'No se pudieron cargar las plantillas' });
     } else {

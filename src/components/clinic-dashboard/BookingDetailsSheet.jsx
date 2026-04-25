@@ -29,7 +29,7 @@ import { Separator } from '@/components/ui/separator';
 import { Calendar, Clock, User, Building, DollarSign, AlertTriangle, Loader2, MessageCircle, FileText } from 'lucide-react';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { formatInTimeZone } from 'date-fns-tz';
 import BookingChat from '@/components/chat/BookingChat';
 import { useNavigate } from 'react-router-dom';
@@ -54,7 +54,7 @@ const BookingDetailsSheet = ({ booking, isOpen, onClose, onBookingCancelled }) =
     if (!booking) return;
     setIsCancelling(true);
     try {
-      const { error } = await supabase.rpc('host_cancel_booking', { p_booking_id: booking.booking_id || booking.id });
+      const { error } = await supabaseClient.rpc('host_cancel_booking', { p_booking_id: booking.booking_id || booking.id });
       if (error) throw error;
 
       toast({

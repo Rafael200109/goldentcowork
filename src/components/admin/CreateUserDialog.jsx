@@ -13,7 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/components/ui/use-toast';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { Loader2, Plus, UserPlus } from 'lucide-react';
 
 const CreateUserDialog = ({ onUserCreated }) => {
@@ -46,7 +46,7 @@ const CreateUserDialog = ({ onUserCreated }) => {
         throw new Error('La contraseña debe tener al menos 6 caracteres');
       }
 
-      const { data, error } = await supabase.functions.invoke('admin-create-user', {
+      const { data, error } = await supabaseClient.functions.invoke('admin-create-user', {
         body: formData
       });
 

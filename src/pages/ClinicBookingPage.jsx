@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { supabase } from '@/lib/customSupabaseClient';
+import { supabaseClient } from '@/config/supabaseConfig';
 import { useToast } from '@/components/ui/use-toast';
 import { useUser } from '@/contexts/UserContext';
 import { useAuth } from '@/contexts/SupabaseAuthContext';
@@ -171,7 +171,7 @@ const ClinicBookingPage = () => {
       try {
         const dateString = format(selectedDate, 'yyyy-MM-dd');
         
-        const { data, error } = await supabase.rpc('get_available_time_slots', { 
+        const { data, error } = await supabaseClient.rpc('get_available_time_slots', { 
           p_clinic_id: clinicId, 
           p_booking_date: dateString,
           p_duration_hours: clinic.min_hours_booking || 1
