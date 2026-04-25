@@ -21,7 +21,7 @@ export function useCachedClinics() {
 
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('clinics')
         .select(`
           id, name, description, address_street, address_city, 

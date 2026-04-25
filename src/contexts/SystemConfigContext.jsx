@@ -46,7 +46,7 @@ export const SystemConfigProvider = ({ children }) => {
     fetchConfig();
 
     // Subscribe to realtime changes
-    const channel = supabase
+    const channel = supabaseClient
       .channel('system_config_changes')
       .on(
         'postgres_changes',
@@ -79,7 +79,7 @@ export const SystemConfigProvider = ({ children }) => {
 
   const saveConfig = async (sectionKey) => {
     try {
-        const { error } = await supabase
+        const { error } = await supabaseClient
         .from('system_config')
         .upsert({ 
             key: sectionKey, 

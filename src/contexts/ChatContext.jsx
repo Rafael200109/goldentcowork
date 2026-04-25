@@ -28,7 +28,7 @@ export const ChatProvider = ({ children }) => {
   useEffect(() => {
     if (!activeSession) return;
 
-    const messageSubscription = supabase
+    const messageSubscription = supabaseClient
       .channel(`chat_messages_${activeSession.id}`)
       .on('postgres_changes', { 
         event: 'INSERT', 
@@ -42,7 +42,7 @@ export const ChatProvider = ({ children }) => {
       })
       .subscribe();
 
-    const sessionSubscription = supabase
+    const sessionSubscription = supabaseClient
       .channel(`chat_session_${activeSession.id}`)
       .on('postgres_changes', {
         event: 'DELETE',

@@ -103,7 +103,7 @@ export function GuestHome() {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const { data: featuredData } = await supabase
+        const { data: featuredData } = await supabaseClient
           .from('clinics')
           .select('*, clinic_photos(*)')
           .eq('status', 'published')

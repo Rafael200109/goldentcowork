@@ -34,7 +34,7 @@ export const NotificationsProvider = ({ children }) => {
 
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('notifications')
         .select('*')
         .eq('user_id', user.id)
@@ -59,7 +59,7 @@ export const NotificationsProvider = ({ children }) => {
   useEffect(() => {
     if (!user) return;
 
-    const channel = supabase
+    const channel = supabaseClient
       .channel(`realtime:notifications:${user.id}`)
       .on(
         'postgres_changes',
@@ -109,7 +109,7 @@ export const NotificationsProvider = ({ children }) => {
 
   const markAsRead = useCallback(async (notificationId) => {
     try {
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('notifications')
         .update({ is_read: true })
         .eq('id', notificationId);
@@ -128,7 +128,7 @@ export const NotificationsProvider = ({ children }) => {
   const markAllAsRead = useCallback(async () => {
     if (!user) return;
     try {
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('notifications')
         .update({ is_read: true })
         .eq('user_id', user.id)

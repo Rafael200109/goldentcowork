@@ -23,7 +23,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { data, error } = await supabaseClient
         .from('booking_chat_messages')
         .select(`
           *,
@@ -57,7 +57,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
   useEffect(() => {
     if (!bookingId || !user) return;
 
-    const channel = supabase
+    const channel = supabaseClient
       .channel(`booking-messages-${bookingId}`)
       .on('postgres_changes', {
         event: 'INSERT',
@@ -66,7 +66,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
         filter: `booking_id=eq.${bookingId}`
       }, async (payload) => {
         // Fetch sender details to display avatar/name correctly immediately
-        const { data: senderData } = await supabase
+        const { data: senderData } = await supabaseClient
           .from('profiles')
           .select('id, full_name, avatar_url')
           .eq('id', payload.new.sender_id)
@@ -119,7 +119,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
     if (!user) return;
 
     try {
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('read_receipts')
         .upsert({
           message_id: messageId,
@@ -210,7 +210,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
 
     setSending(true);
     try {
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('booking_chat_messages')
         .insert({
           booking_id: bookingId,
@@ -246,7 +246,7 @@ export const BookingChatProvider = ({ children, bookingId }) => {
     if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
 
     try {
-       await supabase
+       await supabaseClient
         .from('typing_indicators')
         .upsert({
           booking_id: bookingId,
