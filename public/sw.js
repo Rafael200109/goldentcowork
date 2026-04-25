@@ -21,13 +21,14 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url);
-  
-  // Only cache GET requests for images (specifically from Supabase or Unsplash)
-  if (event.request.method === 'GET' && 
-      (url.pathname.match(/\.(png|jpg|jpeg|gif|webp)$/) || 
-       url.hostname.includes('supabase.co') || 
-       url.hostname.includes('unsplash.com'))) {
-    
+  const isImageRequest = event.request.method === 'GET' && (
+    event.request.destination === 'image' ||
+    url.pathname.match(/\.(png|jpg|jpeg|gif|webp|svg|avif)$/i) ||
+    url.hostname.includes('unsplash.com')
+  );
+
+  // Only cache GET requests for actual image assets, not Supabase REST/Auth calls.
+  if (isImageRequest) {
     event.respondWith(
       caches.match(event.request).then((cachedResponse) => {
         if (cachedResponse) {
@@ -35,18 +36,14 @@ self.addEventListener('fetch', (event) => {
         }
 
         return fetch(event.request).then((response) => {
-          // Check if we received a valid response
-          if (!response || response.status !== 200 || response.type !== 'basic' && response.type !== 'cors') {
+          if (!response || response.status !== 200 || (response.type !== 'basic' && response.type !== 'cors')) {
             return response;
           }
 
-          // Clone the response
           const responseToCache = response.clone();
-
-          // Create custom headers for cache control (31536000 = 1 year)
           const headers = new Headers(responseToCache.headers);
           headers.set('Cache-Control', 'public, max-age=31536000, immutable');
-          
+
           const cacheResponse = new Response(responseToCache.body, {
             status: responseToCache.status,
             statusText: responseToCache.statusText,
